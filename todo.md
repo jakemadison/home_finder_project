@@ -2,8 +2,11 @@ Okay, so, what actually is the plan with this thing?
 
 
 The Problem:
+
 - Trying to find a home on craigslist is annoying
+
 - Mainly this is because you're essentially looking for a needle in a haystack
+
 - The overwhelming majority of ads are useless.
 
 - Let's make a more intelligent tool to parse through the listings.
