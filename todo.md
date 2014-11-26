@@ -53,4 +53,20 @@ user should create a new "goal" page.  Then you can have the ability to switch b
 vancouver, etc.
 
 
+======
+Here's an idea:
+
+- there is a difference between looking for a job when you have a job, (or looking for a home when you have a home) vs
+when you do not.
+
+- If I have a home, I don't want to be actively looking as much, but I would love to be made aware of high-threshold
+contenders. That is, total gem of places.
+
+-> based on ordered-by-filter list, send me my top three picks per day? per week?
+
+How can we make this self-learning? score by words in the page?
+-> machine learn the fucker?  Location lat/lon information, price, details, etc.
+-> word comparison (contains the words, blah or blah and blah).
+
+
 
