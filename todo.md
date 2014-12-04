@@ -69,4 +69,17 @@ How can we make this self-learning? score by words in the page?
 -> word comparison (contains the words, blah or blah and blah).
 
 
+=======
+Location data is available, but we'll have to scrape it.
+Model should be simple.  Let's ignore users and just have it on a per-instance level.
+id, link (to the post), text of the post, location data, posting date, price, text of the post, images included in 
+the post, positive_rating (1,0,null), insert time on the DB.
+
+
+
+
+
+
+
+
 
