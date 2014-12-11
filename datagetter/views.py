@@ -11,6 +11,6 @@ def index(request):
     context = RequestContext(request)
     context_dict = {'boldmessage': "Craigs Data Grabber will go here..."}
 
-    return render_to_response('craig_data_getter/index.html', context_dict, context)
+    return render_to_response('datagetter/index.html', context_dict, context)
 
     # return HttpResponse("Craigs Data Grabber will go here...")

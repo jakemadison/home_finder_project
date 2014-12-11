@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home_finder',
-    'craig_data_getter',
+    'datagetter',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -86,5 +86,5 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
-    os.path.join(BASE_DIR,  'templates/craig_data_getter'),
+    os.path.join(BASE_DIR, 'templates/datagetter'),
 )
