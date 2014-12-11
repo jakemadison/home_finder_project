@@ -1,8 +1,16 @@
 from django.shortcuts import render
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 # Create your views here.
 from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Craigs Data Grabber will go here...")
+
+    context = RequestContext(request)
+    context_dict = {'boldmessage': "Craigs Data Grabber will go here..."}
+
+    return render_to_response('craig_data_getter/index.html', context_dict, context)
+
+    # return HttpResponse("Craigs Data Grabber will go here...")

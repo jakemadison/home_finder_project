@@ -2,7 +2,6 @@ from __future__ import print_function
 import feedparser
 
 
-
 def find_links(url):
     result = feedparser.parse(url)
 
