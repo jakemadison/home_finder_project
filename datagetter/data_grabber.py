@@ -4,22 +4,45 @@ import db_controller
 import time
 from bs4 import BeautifulSoup
 import requests
+import pickle
 
 
-def create_posting_from_parsed_link(link):
+def pickle_content(content):
+    with open('./temp_parsed_page.data', 'wb') as pickle_file:
+        pickle.dump(content, pickle_file)
+
+    return True
+
+
+def get_picked_content():
+
+    with open('./temp_parsed_page.data', 'r') as pickle_file:
+        file_contents = pickle.load(pickle_file)
+
+    return file_contents
+
+
+def create_posting_from_parsed_link(resp):
     """takes in a link, follows that link, grabs the required data and sends it along to the DB"""
 
-    print(link)
+    parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
+
+    print(parsed_page.prettify(encoding=resp.encoding))
 
 
-def parse_page_from_link(link, encoding='utf-8'):
+def parse_page_from_link(link):
+
+    """take in a link, get requests to give us the html content, parse it with beautiful soup to extract
+    our required info."""
 
     resp = requests.get(link, timeout=3)
     resp.raise_for_status()  # <- no-op if status!=200
 
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
 
-    print(parsed_page.prettify(encoding=encoding))
+    # print(parsed_page.prettify(encoding=resp.encoding))
+
+    # pickle_content(resp)
 
     return parsed_page
 
@@ -54,5 +77,6 @@ if __name__ == '__main__':
     # find_links_on_page(source_url)
 
     test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
-    parsed = parse_page_from_link(test_link)
+    # parsed = parse_page_from_link(test_link)
+    parsed = get_picked_content()
     create_posting_from_parsed_link(parsed)
