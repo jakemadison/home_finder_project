@@ -2,12 +2,26 @@ from __future__ import print_function
 import feedparser
 import db_controller
 import time
+from bs4 import BeautifulSoup
+import requests
 
 
-def create_posting_from_link(link):
+def create_posting_from_parsed_link(link):
     """takes in a link, follows that link, grabs the required data and sends it along to the DB"""
 
     print(link)
+
+
+def parse_page_from_link(link, encoding='utf-8'):
+
+    resp = requests.get(link, timeout=3)
+    resp.raise_for_status()  # <- no-op if status!=200
+
+    parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
+
+    print(parsed_page.prettify(encoding=encoding))
+
+    return parsed_page
 
 
 def find_links_on_page(url):
@@ -24,7 +38,9 @@ def find_links_on_page(url):
             print("link was found in DB already: {0}".format(link))
         else:
             print("link was NOT found in DB: {0}  we should do something!".format(link))
-            create_posting_from_link(link)
+            parsed_page = parse_page_from_link(link)
+            create_posting_from_parsed_link(parsed_page)
+
             time.sleep(2)  # I feel like CL might block me otherwise...
 
         break
@@ -38,4 +54,5 @@ if __name__ == '__main__':
     # find_links_on_page(source_url)
 
     test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
-    create_posting_from_link(test_link)
+    parsed = parse_page_from_link(test_link)
+    create_posting_from_parsed_link(parsed)
