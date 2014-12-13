@@ -1,6 +1,12 @@
 from django.contrib import admin
 from datagetter.models import PostingImages, Postings
 
+
 # Register your models here.
-admin.site.register(Postings)
+class PostingsAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'link', 'title')
+
+
+admin.site.register(Postings, PostingsAdmin)
 admin.site.register(PostingImages)
