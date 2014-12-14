@@ -20,6 +20,10 @@ class Postings(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     housing_type = models.CharField(max_length=64, null=True, blank=True)
 
+    # here's where all the posting attributes should go:
+
+    # bedrooms = models
+
     positive_rating = models.NullBooleanField(null=True, blank=True, default=None)
 
     def __unicode__(self):
