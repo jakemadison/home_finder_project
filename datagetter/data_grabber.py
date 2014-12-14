@@ -5,6 +5,7 @@ import time
 from bs4 import BeautifulSoup
 import requests
 import pickle
+from datetime import datetime
 
 
 def pickle_content(content):
@@ -26,8 +27,50 @@ def create_posting_from_parsed_link(resp):
     """takes in a link, follows that link, grabs the required data and sends it along to the DB"""
 
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
+    posting_title = parsed_page.find('h2', {"class": "postingtitle"})
+    price = posting_title.contents[2].strip()
 
-    print(parsed_page.prettify(encoding=resp.encoding))
+    # get basics from the title section:
+    price = int(price[1:])
+    housing_type = str(posting_title.contents[3].contents[0]).replace('/', '').replace('-', '').strip()
+    title = posting_title.contents[4].strip()
+
+    # get our location data:
+    map_element = parsed_page.find('div', {"class": "mapbox"}).find('div', {"class": 'viewposting'})
+    lat = map_element['data-latitude']
+    lon = map_element['data-longitude']
+
+    # get time posted:
+    post_info = parsed_page.find("p", {"class": "postinginfo"}).find("time")
+    posted_date = post_info['datetime'].strip()
+    posted_date = datetime.strptime(posted_date[:-5], '%Y-%m-%dT%H:%M:%S')
+
+    # get the main text of the post:
+    post_body = parsed_page.find("section", {"id": "postingbody"}).text
+
+    # get the attributes of the post, dogs, cats, washer/dryer, etc.
+
+    # I need to find a good way to deal with these optional attributes.
+    # I could just add boolean fields to the posting model, because the total number of options for what can
+    # appear is fixed... so presence = 1, and absence = 0.
+    # Bedroom bathroom should be numbers though...
+    post_attributes = parsed_page.find("p", {"class": "attrgroup"}).findAll("span")
+
+    post_attrs = [p.text for p in post_attributes]
+
+    print(post_attrs)
+
+    for attribute in post_attributes:
+        print(attribute.text)
+
+
+
+
+
+    # now we need to grab all of our relevant data off of the parsed page
+    #
+
+    # then we'll send that data off to the DB to get inserted
 
 
 def parse_page_from_link(link):

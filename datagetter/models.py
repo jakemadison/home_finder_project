@@ -6,7 +6,7 @@ from django.db import models
 class Postings(models.Model):
 
     # PK is generated automatically in django.  neat!
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=2024)
     link = models.URLField()
 
     full_text = models.TextField()
@@ -18,6 +18,7 @@ class Postings(models.Model):
     insert_date = models.DateField(auto_now_add=True)
 
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    housing_type = models.CharField(max_length=64, null=True, blank=True)
 
     positive_rating = models.NullBooleanField(null=True, blank=True, default=None)
 
