@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 import requests
 import pickle
 from datetime import datetime
-
+import traceback
+import sys
 total_set = set()
 
 
@@ -30,29 +31,39 @@ def create_posting_from_parsed_link(resp):
 
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
     posting_title = parsed_page.find('h2', {"class": "postingtitle"})
-    price = posting_title.contents[2].strip()
 
     # get basics from the title section:
     try:
-        price = int(price[1:])
+        housing_type = posting_title.find('span', {"class": 'housing'})
+        if housing_type:
 
-    except ValueError, v:
-        pass
+            price = posting_title.contents[2].strip()
+            price = int(price[1:])
 
-    try:
         housing_type = str(posting_title.contents[3].contents[0]).replace('/', '').replace('-', '').strip()
         title = posting_title.contents[4].strip()
-    except IndexError, i:
-        pass
 
     # get our location data:
-    try:
-        map_element = parsed_page.find('div', {"class": "mapbox"}).find('div', {"class": 'viewposting'})
-        lat = map_element['data-latitude']
-        lon = map_element['data-longitude']
+        map_element = parsed_page.find('div', {"class": "mapbox"})
 
-    except AttributeError, a:
-        pass
+        if map_element:
+            map_element = map_element.find('div', {"class": 'viewposting'})
+            lat = map_element['data-latitude']
+            lon = map_element['data-longitude']
+
+        else:
+            # this post has no map information
+            pass
+
+    except Exception, e:
+        print('error on parsing!: {0}'.format(e))
+        traceback.print_exc(file=sys.stdout)
+        print(parsed_page)
+        raise
+
+    else:
+        print(parsed_page)
+        raise
 
     # get time posted:
     post_info = parsed_page.find("p", {"class": "postinginfo"}).find("time")
@@ -76,7 +87,7 @@ def create_posting_from_parsed_link(resp):
 
     for attribute in post_attributes:
         total_set.add(attribute.text)
-        print(attribute.text)
+        # print(attribute.text)
 
     print('--------')
 
@@ -144,7 +155,11 @@ if __name__ == '__main__':
     parsed_array = get_pickled_content()
 
     for each in parsed_array:
-        create_posting_from_parsed_link(each)
+        try:
+            create_posting_from_parsed_link(each)
+        except Exception, e:
+            print('dying now...')
+            break
 
     for each in sorted(list(total_set)):
         print(each)

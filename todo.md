@@ -76,7 +76,14 @@ id, link (to the post), text of the post, location data, posting date, price, te
 the post, positive_rating (1,0,null), insert time on the DB.
 
 
-
+=======
+ratings should be done using bootstrap carousel: http://getbootstrap.com/javascript/#carousel
+something like a double click to "like" a post
+refresh button for grabbing new posts
+navigation: "new posts", "liked posts", "all posts"
+basically, like tinder for navigation
+post attributes could be iconified, map location, price, title, maybe the start of the post
+carousel should be images from post.
 
 
 
