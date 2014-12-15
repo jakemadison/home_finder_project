@@ -75,7 +75,7 @@ def create_posting_from_parsed_link(resp):
     # print(post_attrs)
 
     for attribute in post_attributes:
-        total_set.add(attribute)
+        total_set.add(attribute.text)
         print(attribute.text)
 
     print('--------')
@@ -146,5 +146,5 @@ if __name__ == '__main__':
     for each in parsed_array:
         create_posting_from_parsed_link(each)
 
-    for each in total_set:
+    for each in sorted(list(total_set)):
         print(each)
