@@ -7,6 +7,8 @@ import requests
 import pickle
 from datetime import datetime
 
+total_set = set()
+
 
 def pickle_content(content):
     with open('./temp_parsed_page.data', 'wb') as pickle_file:
@@ -43,8 +45,6 @@ def create_posting_from_parsed_link(resp):
     except IndexError, i:
         pass
 
-
-
     # get our location data:
     try:
         map_element = parsed_page.find('div', {"class": "mapbox"}).find('div', {"class": 'viewposting'})
@@ -75,13 +75,10 @@ def create_posting_from_parsed_link(resp):
     # print(post_attrs)
 
     for attribute in post_attributes:
+        total_set.add(attribute)
         print(attribute.text)
 
     print('--------')
-
-
-
-
 
     # now we need to grab all of our relevant data off of the parsed page
     #
@@ -130,7 +127,6 @@ def find_links_on_page(url):
             print("done finding and parsing link: {0}".format(link))
             time.sleep(2)  # I feel like CL might block me otherwise...
 
-
     # at this point, we should do a check vs the db on most recent, and import new ones..
 
 if __name__ == '__main__':
@@ -149,3 +145,6 @@ if __name__ == '__main__':
 
     for each in parsed_array:
         create_posting_from_parsed_link(each)
+
+    for each in total_set:
+        print(each)
