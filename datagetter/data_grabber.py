@@ -5,12 +5,17 @@ import time
 from bs4 import BeautifulSoup
 import requests
 import pickle
+import re
 from datetime import datetime
 import traceback
 import sys
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "home_finder_project.settings")
-from datagetter.models import Postings
+from datagetter.models import Postings, PostingImages
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+import django
+django.setup()
 
 
 total_set = set()
@@ -34,10 +39,15 @@ def get_pickled_content():
 def create_posting_from_parsed_link(resp):
     """takes in a link, follows that link, grabs the required data and sends it along to the DB"""
 
+    if resp.url == 'http://vancouver.craigslist.ca/van/apa/4804204216.html':
+        return
+
     new_posting = Postings()
 
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
     posting_title = parsed_page.find('h2', {"class": "postingtitle"})
+
+    new_posting.link = resp.url
 
     # get basics from the title section:
     try:
@@ -57,12 +67,16 @@ def create_posting_from_parsed_link(resp):
 
         else:
             # try to get price from a $ in the title:
-
             price = [x for x in title.split(' ') if '$' in x]
+
             if price:
-                new_posting.price = price[0]
+                try:
+                    new_posting.price = int(price[0])
+                except ValueError, v:
+                    print('could not get price.  probably a typo: {0}, {1}'.format(price, v))
+                    new_posting.price = None
             else:
-                new_posting.price = 0
+                new_posting.price = None
 
     # get our location data:
         map_element = parsed_page.find('div', {"class": "mapbox"})
@@ -88,30 +102,88 @@ def create_posting_from_parsed_link(resp):
     new_posting.post_date = datetime.strptime(posted_date[:-5], '%Y-%m-%dT%H:%M:%S')
 
     # get the main text of the post:
-    new_posting.full_text = parsed_page.find("section", {"id": "postingbody"}).text
+    full_text = parsed_page.find("section", {"id": "postingbody"}).text
+    if full_text:
+        stripped_text = os.linesep.join([s for s in full_text.splitlines() if s])
+        new_posting.full_text = stripped_text.encode('utf-8')
+
+        if 'no pets' in stripped_text.lower():
+            new_posting.cat_ok = False
+            new_posting.dog_ok = False
+
+        if 'no smoking' in stripped_text.lower():
+            new_posting.smoking = False
 
     # get the attributes of the post, dogs, cats, washer/dryer, etc.
-
-    # I need to find a good way to deal with these optional attributes.
-    # I could just add boolean fields to the posting model, because the total number of options for what can
-    # appear is fixed... so presence = 1, and absence = 0.
-    # Bedroom bathroom should be numbers though...
     post_attributes = parsed_page.find("p", {"class": "attrgroup"}).findAll("span")
 
-    post_attrs = [p.text for p in post_attributes]
-
-    # print(post_attrs)
-
     for attribute in post_attributes:
-        total_set.add(attribute.text)
-        # print(attribute.text)
+
+        attribute_text = attribute.text
+        total_set.add(attribute_text)
+
+        if 'w/d in unit' in attribute_text:
+            new_posting.w_d_in_unit = True
+
+        if 'available' in attribute_text:
+            mangled_available_date = attribute_text.title()[10:]+' '+str(datetime.now().year)
+            new_posting.available_date = datetime.strptime(mangled_available_date, '%b %d %Y')
+
+        if 'no smoking' in attribute_text:
+            new_posting.smoking = False
+
+        if 'laundry in bldg' in attribute_text:
+            new_posting.laundry_available = True
+            new_posting.w_d_in_unit = False
+
+        if re.compile("[0-9]BR").search(attribute_text):
+            print(attribute_text)
+            new_posting.number_bedrooms = int(attribute_text[0])
+
+        if re.compile("[0-9]Ba").search(attribute_text):
+            new_posting.number_bathrooms = int(attribute_text.split(' ')[-1][0])
 
     print('--------')
+
+    # write our record to the DB
+    new_posting.save()
+
+    # try and grab photos
+    img_links_array = []
+    script_tags = parsed_page.findAll('script')
+    for each_script in script_tags:
+        if 'var imgList' in each_script.text:
+            var_array = [str(x) for x in each_script.text.split('"')]
+            for each_var in var_array:
+                if 'images.craigslist' in each_var and '50x50c' not in each_var:
+                    img_links_array.append(each_var)
+
+    if img_links_array:
+        for each_image_link in img_links_array:
+            print('adding image: {0}'.format(each_image_link))
+            new_image = PostingImages()
+            new_image.image_link = each_image_link
+            new_image.posting_id = new_posting.id
+
+            r = requests.get(each_image_link)
+            img_temp = NamedTemporaryFile(delete=True)
+            img_temp.write(r.content)
+            img_temp.flush()
+
+            new_image.image_data.save(each_image_link, File(img_temp))
+            time.sleep(1)
+
+    print('========')
+    # print(parsed_page)
+    #
+    # raise
+
     for k, v in new_posting.__dict__.iteritems():
-        print("{0} -> {1}".format(k, v))
+        print("({0}) -> {1}".format(k, v))
         print()
 
-    raise
+        # print(parsed_page)
+        # raise
 
     # now we need to grab all of our relevant data off of the parsed page
     #
@@ -176,12 +248,19 @@ if __name__ == '__main__':
     # parsed = parse_page_from_link(test_link)
     parsed_array = get_pickled_content()
 
+    existing_links = db_controller.get_all_links()
+
     for each in parsed_array:
-        try:
-            create_posting_from_parsed_link(each)
-        except Exception, e:
-            print('dying now...')
-            break
+        if each.url not in existing_links:
+            try:
+                create_posting_from_parsed_link(each)
+            except Exception, e:
+                traceback.print_exc(file=sys.stdout)
+                print('dying now...')
+                break
+
+        else:
+            print('link exists, skipping: {0}'.format(each.url))
 
     for each in sorted(list(total_set)):
         print(each)
