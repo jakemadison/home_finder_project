@@ -1,2 +1,7 @@
-.carousel-inner > .item > img{ width:450px; height:600px; min-width: 50%; float: left;}
-.carousel-inner > .item > .second_image{ width:450px; height:600px; min-width: 50%; float: right;}
+.carousel-inner > .item > img{ min-width: 50%; max-width:50%; float: left;}
+/*.carousel-inner > .item > .second_image{ min-width: 50%; max-width:50%; float: left;}*/
+
+/*.carousel {*/
+  /*height: 100%;*/
+/*}*/
+
