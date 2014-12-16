@@ -8,6 +8,11 @@ import pickle
 from datetime import datetime
 import traceback
 import sys
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "home_finder_project.settings")
+from datagetter.models import Postings
+
+
 total_set = set()
 
 
@@ -29,27 +34,43 @@ def get_pickled_content():
 def create_posting_from_parsed_link(resp):
     """takes in a link, follows that link, grabs the required data and sends it along to the DB"""
 
+    new_posting = Postings()
+
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
     posting_title = parsed_page.find('h2', {"class": "postingtitle"})
 
     # get basics from the title section:
     try:
+
+        title = parsed_page.find('title').text
+        new_posting.title = title
+
         housing_type = posting_title.find('span', {"class": 'housing'})
+
         if housing_type:
+            housing_type = housing_type.text.replace('/', '').replace('-', '').strip()
+            new_posting.housing_type = housing_type
 
             price = posting_title.contents[2].strip()
             price = int(price[1:])
+            new_posting.price = price
 
-        housing_type = str(posting_title.contents[3].contents[0]).replace('/', '').replace('-', '').strip()
-        title = posting_title.contents[4].strip()
+        else:
+            # try to get price from a $ in the title:
+
+            price = [x for x in title.split(' ') if '$' in x]
+            if price:
+                new_posting.price = price[0]
+            else:
+                new_posting.price = 0
 
     # get our location data:
         map_element = parsed_page.find('div', {"class": "mapbox"})
 
         if map_element:
             map_element = map_element.find('div', {"class": 'viewposting'})
-            lat = map_element['data-latitude']
-            lon = map_element['data-longitude']
+            new_posting.lat = map_element['data-latitude']
+            new_posting.lon = map_element['data-longitude']
 
         else:
             # this post has no map information
@@ -61,17 +82,13 @@ def create_posting_from_parsed_link(resp):
         print(parsed_page)
         raise
 
-    else:
-        print(parsed_page)
-        raise
-
     # get time posted:
     post_info = parsed_page.find("p", {"class": "postinginfo"}).find("time")
     posted_date = post_info['datetime'].strip()
-    posted_date = datetime.strptime(posted_date[:-5], '%Y-%m-%dT%H:%M:%S')
+    new_posting.post_date = datetime.strptime(posted_date[:-5], '%Y-%m-%dT%H:%M:%S')
 
     # get the main text of the post:
-    post_body = parsed_page.find("section", {"id": "postingbody"}).text
+    new_posting.full_text = parsed_page.find("section", {"id": "postingbody"}).text
 
     # get the attributes of the post, dogs, cats, washer/dryer, etc.
 
@@ -90,6 +107,11 @@ def create_posting_from_parsed_link(resp):
         # print(attribute.text)
 
     print('--------')
+    for k, v in new_posting.__dict__.iteritems():
+        print("{0} -> {1}".format(k, v))
+        print()
+
+    raise
 
     # now we need to grab all of our relevant data off of the parsed page
     #
