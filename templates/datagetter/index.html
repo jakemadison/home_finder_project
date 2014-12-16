@@ -4,18 +4,144 @@
 
 <html>
     <head>
-        <title>Data Grabber</title>
+        <title>Data Getter</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+
+            <!-- Custom styles for this template -->
+    <link href="{% static "css/carousel.css" %}" rel="stylesheet">
+    <link href="{% static "css/main.css" %}" rel="stylesheet">
     </head>
 
-    <body>
-        <h1>Data gggggGetter</h1>
-        hello world! <strong>{{ boldmessage }}</strong><hr />
 
+    <!-- NAVBAR
+================================================== -->
+  <body>
+
+{#    <div class="navbar-wrapper">#}
+{#      <div class="container">#}
+{##}
+{#        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">#}
+{#          <div class="container">#}
+{#            <div class="navbar-header">#}
+{#              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">#}
+{#                <span class="sr-only">Toggle navigation</span>#}
+{#                <span class="icon-bar"></span>#}
+{#                <span class="icon-bar"></span>#}
+{#                <span class="icon-bar"></span>#}
+{#              </button>#}
+{#              <a class="navbar-brand" href="#">Project name</a>#}
+{#            </div>#}
+{#            <div id="navbar" class="navbar-collapse collapse">#}
+{#              <ul class="nav navbar-nav">#}
+{#                <li class="active"><a href="#">Home</a></li>#}
+{#                <li><a href="#about">About</a></li>#}
+{#                <li><a href="#contact">Contact</a></li>#}
+{#                <li class="dropdown">#}
+{#                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>#}
+{#                  <ul class="dropdown-menu" role="menu">#}
+{#                    <li><a href="#">Action</a></li>#}
+{#                    <li><a href="#">Another action</a></li>#}
+{#                    <li><a href="#">Something else here</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li class="dropdown-header">Nav header</li>#}
+{#                    <li><a href="#">Separated link</a></li>#}
+{#                    <li><a href="#">One more separated link</a></li>#}
+{#                  </ul>#}
+{#                </li>#}
+{#              </ul>#}
+{#            </div>#}
+{#          </div>#}
+{#        </nav>#}
+{##}
+{#      </div>#}
+{#    </div>#}
+
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+      <div class="carousel-inner" role="listbox">
+
+      <div class="item active">
+          <img src="{{ MEDIA_URL }}{{ posts.0.image.0.image_data }}" alt="First slide">
+          {% if posts.0.image.1.image_data %}
+          <img src="{{ MEDIA_URL }}{{ posts.0.image.1.image_data }}" alt="First slide">
+          {% endif %}
+          <div class="container">
+            <div class="carousel-caption">
+              <h4>{{ posts.0.post.title }}</h4>
+              <h5>{{ posts.0.post.full_text }}</h5>
+              <p><a class="btn btn-sm btn-primary" href="#" role="button">View Posting</a></p>
+            </div>
+          </div>
+        </div>
+
+          {% for post in posts|slice:"1:" %}
+
+        <div class="item">
+        <div class="container pull-right">
+          <img src="{{ MEDIA_URL }}{{ post.image.0.image_data }}" alt="First slide">
+            {% if post.image.1.image_data %}
+            <img src="{{ MEDIA_URL }}{{ post.image.1.image_data }}" alt="First slide" class="second_image">
+            {% endif %}
+        </div>
+          <div class="container">
+            <div class="carousel-caption">
+              <h4>{{ post.post.title }}</h4>
+              <h5>{{ post.post.full_text }}</h5>
+              <p><a class="btn btn-sm btn-primary" href="#" role="button">View Posting</a></p>
+            </div>
+          </div>
+        </div>
+
+          {% endfor %}
+
+
+
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div><!-- /.carousel -->
+
+
+
+{##}
+{#        <h1>Data gggggGetter</h1>#}
+{#        hello world! <strong>{{ boldmessage }}</strong><hr />#}
+{##}
 {#    <img src="../../static/assets/screen1.png">#}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#        <img src="{% static "assets/screen1.png" %}">#}
+{##}
+{#    <hr>#}
 
-        <img src="{% static "assets/screen1.png" %}">
+{#    {% if posts %}#}
+{#        <ul>#}
+{#        {% for post in posts %}#}
+{#        <li>{{ post.full_text }}</li>#}
+{#        {% endfor %}#}
+{#        </ul>#}
+{#    {% endif %}#}
 
-    <hr>
+
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 
     </body>
