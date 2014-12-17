@@ -86,6 +86,14 @@ post attributes could be iconified, map location, price, title, maybe the start 
 carousel should be images from post.
 
 
+-- we need a way of removing posts from the DB that are no longer active..
+--> ugh, okay, maybe we should ditch the rss feed and parse out links from the main page.
+except... we want to retain user choice to be able to continue to build the match algo..
+still, users need a way of being shown that something has been delisted.. 
+let's just add a field on the postings model for "delisted", and update that.
+then current query just ignores delisted records.
+
+
 
 
 

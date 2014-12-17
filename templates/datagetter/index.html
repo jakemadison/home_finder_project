@@ -72,6 +72,8 @@
                                 <span class="glyphicon glyphicon-share-alt"></span></a></h3>
                       {%  if post.neighbourhood %}
                       <h4><b>{{ post.neighbourhood }}</b></h4>
+                          {% else %}
+                          <h6><b>lat: {{ post.post.lat }}, lon: {{post.post.lon}}</b></h6>
                       {% endif %}
                     </div>
           </div>

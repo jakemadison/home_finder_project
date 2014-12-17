@@ -36,7 +36,7 @@ def get_pickled_content():
     return file_contents
 
 
-def create_posting_from_parsed_link(resp):
+def create_posting_from_parsed_link(resp, skip_db=False):
     """takes in a link, follows that link, grabs the required data and sends it along to the DB"""
 
     new_posting = Postings()
@@ -67,13 +67,21 @@ def create_posting_from_parsed_link(resp):
             price = [x for x in title.split(' ') if '$' in x]
 
             if price:
+                price = price[0]  # whatever the first one is in the list
+
                 try:
-                    new_posting.price = int(price[0])
+                    new_posting.price = int(price[1:])  # get rid of $, and int to our object
                 except ValueError, v:
                     print('could not get price.  probably a typo: {0}, {1}'.format(price, v))
                     new_posting.price = None
-            else:
-                new_posting.price = None
+            else:  # still no price.. get any $ from posting title text
+                price = [x for x in posting_title.text.split(' ') if '$' in x]
+                if price:
+                    price = price[0]  # first one in the list
+                    price = price[1:]  # get rid of $
+                    new_posting.price = int(price)
+                else:
+                    new_posting.price = None
 
     # get our location data:
         map_element = parsed_page.find('div', {"class": "mapbox"})
@@ -103,6 +111,12 @@ def create_posting_from_parsed_link(resp):
     if full_text:
         stripped_text = os.linesep.join([s for s in full_text.splitlines() if s])
         new_posting.full_text = stripped_text.encode('utf-8')
+
+        # if we STILL don't have price, try and get it from the full text:
+        if new_posting.price is None:
+            prices = [x for x in stripped_text.split(' ') if '$' in x]
+            price = prices[0]
+            new_posting.price = int(price[1:])
 
         if 'no pets' in stripped_text.lower():
             new_posting.cat_ok = False
@@ -140,8 +154,11 @@ def create_posting_from_parsed_link(resp):
         if re.compile("[0-9]Ba").search(attribute_text):
             new_posting.number_bathrooms = int(attribute_text.split(' ')[-1][0])
 
-    print('--------')
+    if skip_db:  # this is just for testing parse stuff.
+        print(parsed_page)
+        return new_posting
 
+    print('--------')
     # write our record to the DB
     new_posting.save()
 
@@ -175,13 +192,13 @@ def create_posting_from_parsed_link(resp):
     #
     # raise
 
-    for k, v in new_posting.__dict__.iteritems():
-        try:
-            print("({0}) -> {1}".format(k, v))
-        except UnicodeEncodeError, enc:
-            print('i was unable to render this thing like an idiot {0}, {1}'.format(k.encode('utf-8')),
-                  v.encode('utf-8'))
-        print()
+    # for k, v in new_posting.__dict__.iteritems():
+    #     try:
+    #         print("({0}) -> {1}".format(k, v))
+    #     except UnicodeEncodeError, enc:
+    #         print('i was unable to render this thing like an idiot {0}, {1}'.format(k.encode('utf-8')),
+    #               v.encode('utf-8'))
+    #     print()
 
         # print(parsed_page)
         # raise
@@ -229,21 +246,33 @@ if __name__ == '__main__':
     # find_links_on_page(source_url)
     # pickle_content(test_data_array)
 
-    test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
-    link_array = find_links_on_page(source_url)
-    existing_links = db_controller.get_all_links()
+    test_url = 'http://vancouver.craigslist.ca/van/apa/4799896001.html'
+    p_page = parse_page_from_link(test_url)
+    post_obj = create_posting_from_parsed_link(p_page, skip_db=True)
 
-    print(link_array)
+    for k, v in post_obj.__dict__.iteritems():
+        print('{0} -> {1}'.format(k, v))
+        print()
 
-    for each_link in link_array:
-        if each_link in existing_links:
-            print('link is already there')
-            continue
 
-        print('it"s a whole new link! attempting to parse: {0}'.format(each_link))
-        link_response = parse_page_from_link(each_link)
-        time.sleep(1)
-        create_posting_from_parsed_link(link_response)
+
+    if False:
+
+        test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
+        link_array = find_links_on_page(source_url)
+        existing_links = db_controller.get_all_links()
+
+        print(link_array)
+
+        for each_link in link_array:
+            if each_link in existing_links:
+                print('link is already there')
+                continue
+
+            print('it"s a whole new link! attempting to parse: {0}'.format(each_link))
+            link_response = parse_page_from_link(each_link)
+            time.sleep(1)
+            create_posting_from_parsed_link(link_response)
 
     # parsed = parse_page_from_link(test_link)
     # parsed_array = get_pickled_content()
