@@ -39,9 +39,6 @@ def get_pickled_content():
 def create_posting_from_parsed_link(resp):
     """takes in a link, follows that link, grabs the required data and sends it along to the DB"""
 
-    if resp.url == 'http://vancouver.craigslist.ca/van/apa/4804204216.html':
-        return
-
     new_posting = Postings()
 
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
@@ -52,7 +49,7 @@ def create_posting_from_parsed_link(resp):
     # get basics from the title section:
     try:
 
-        title = parsed_page.find('title').text
+        title = parsed_page.find('title').text.encode('utf-8')
         new_posting.title = title
 
         housing_type = posting_title.find('span', {"class": 'housing'})
@@ -179,7 +176,11 @@ def create_posting_from_parsed_link(resp):
     # raise
 
     for k, v in new_posting.__dict__.iteritems():
-        print("({0}) -> {1}".format(k, v))
+        try:
+            print("({0}) -> {1}".format(k, v))
+        except UnicodeEncodeError, enc:
+            print('i was unable to render this thing like an idiot {0}, {1}'.format(k.encode('utf-8')),
+                  v.encode('utf-8'))
         print()
 
         # print(parsed_page)
@@ -197,18 +198,15 @@ def parse_page_from_link(link):
     our required info."""
 
     try:
-        resp = requests.get(link, timeout=3)
+        resp = requests.get(link, timeout=5)
         resp.raise_for_status()  # <- no-op if status!=200
     except Exception, e:
+        print('i died while parsing the link :<')
         return False
 
-    parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
+    # test_data_array.append(resp)
 
-    # print(parsed_page.prettify(encoding=resp.encoding))
-
-    test_data_array.append(resp)
-
-    return parsed_page
+    return resp
 
 
 def find_links_on_page(url):
@@ -218,19 +216,7 @@ def find_links_on_page(url):
     result = feedparser.parse(url)
     links = [str(item['dc_source']) for item in result["items"]]
 
-    # links.append('http://test.com/')
-
-    for link in links:
-        if db_controller.search_for_link(link):
-            print("link was found in DB already: {0}".format(link))
-        else:
-            print("link was NOT found in DB: {0}  we should do something!".format(link))
-
-            parse_page_from_link(link)
-            # parsed_page = parse_page_from_link(link)
-            # create_posting_from_parsed_link(parsed_page)
-            print("done finding and parsing link: {0}".format(link))
-            time.sleep(2)  # I feel like CL might block me otherwise...
+    return links
 
     # at this point, we should do a check vs the db on most recent, and import new ones..
 
@@ -244,23 +230,35 @@ if __name__ == '__main__':
     # pickle_content(test_data_array)
 
     test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
-
-    # parsed = parse_page_from_link(test_link)
-    parsed_array = get_pickled_content()
-
+    link_array = find_links_on_page(source_url)
     existing_links = db_controller.get_all_links()
 
-    for each in parsed_array:
-        if each.url not in existing_links:
-            try:
-                create_posting_from_parsed_link(each)
-            except Exception, e:
-                traceback.print_exc(file=sys.stdout)
-                print('dying now...')
-                break
+    print(link_array)
 
-        else:
-            print('link exists, skipping: {0}'.format(each.url))
+    for each_link in link_array:
+        if each_link in existing_links:
+            print('link is already there')
+            continue
 
-    for each in sorted(list(total_set)):
-        print(each)
+        print('it"s a whole new link! attempting to parse: {0}'.format(each_link))
+        link_response = parse_page_from_link(each_link)
+        time.sleep(1)
+        create_posting_from_parsed_link(link_response)
+
+    # parsed = parse_page_from_link(test_link)
+    # parsed_array = get_pickled_content()
+
+    # for each in parsed_array:
+    #     if each.url not in existing_links:
+    #         try:
+    #             create_posting_from_parsed_link(each)
+    #         except Exception, e:
+    #             traceback.print_exc(file=sys.stdout)
+    #             print('dying now...')
+    #             break
+    #
+    #     else:
+    #         print('link exists, skipping: {0}'.format(each.url))
+    #
+    # for each in sorted(list(total_set)):
+    #     print(each)

@@ -27,6 +27,7 @@
 
       <div class="carousel-inner" role="listbox">
           <div class="item active row">
+          <span id="id_num">{{ posts.0.post.id }}</span>
               <div class="carousel-caption">
                   <h3><b>${{ posts.0.post.price }}</b>: {{ posts.0.post.title }}</h3>
                 </div> <!-- caption -->
@@ -50,6 +51,7 @@
           {% for post in posts|slice:"1:" %}
 
           <div class="item row">
+          <span id="id_num">{{ post.post.id }}</span>
                   <div class="carousel-caption">
                         <h3><b>${{ post.post.price }}</b>: {{ post.post.title }}</h3>
                     </div>
