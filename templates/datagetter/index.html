@@ -26,41 +26,51 @@
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
 
       <div class="carousel-inner" role="listbox">
-          <div class="item active">
+          <div class="item active row">
+              <div class="carousel-caption">
+                  <h3><b>${{ posts.0.post.price }}</b>: {{ posts.0.post.title }}</h3>
+                </div> <!-- caption -->
 
-              {% for image in posts.0.image %}
+          <div class="col-md-8">
+              {% for image in posts.0.image|slice:":1" %}
                     <img src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide">
               {% endfor %}
 
+          </div>
 
-                <div class="carousel-caption">
-                  <h3>{{ posts.0.post.title }} - <b>${{ posts.0.post.price }}</b></h3>
-                </div> <!-- caption -->
+          <div class="col-md-4">
+              <div class="well">
+                  <a href="{{ posts.0.post.link }}" target="_blank"><b>{{ posts.0.post.title }}</b></a>
+{#                  <p>{{ posts.0.post.full_text }}</p>#}
+              </div>
+          </div>
 
           </div> <!-- item -->
 
           {% for post in posts|slice:"1:" %}
 
-          <div class="item">
+          <div class="item row">
+                  <div class="carousel-caption">
+                        <h3><b>${{ post.post.price }}</b>: {{ post.post.title }}</h3>
+                    </div>
 
-                {%  for image in post.image|slice:":3" %}
+          <div class="col-md-8">
+                {%  for image in post.image|slice:":1" %}
                     <img src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide">
                 {% endfor %}
-                  <div class="container">
-                    <div class="carousel-caption">
-                        <h3>{{ post.post.title }} - <b>${{ post.post.price }}</b></h3>
-        {#              <h5>{{ post.post.full_text }}</h5>#}
-{#                      <p>#}
+          </div>
 
-{#                          <a class="btn btn-lg btn-success" href="#" role="button">#}
-{#                          <span class="glyphicon glyphicon-thumbs-up"></span></a>#}
-{##}
-{#                          <a class="btn btn-lg btn-danger" href="#" role="button">#}
-{#                          <span class="glyphicon glyphicon-thumbs-down"></span></a>#}
 
-{#                      </p>#}
-                    </div>
-                  </div>
+            <div class="col-md-4">
+              <div class="well info_well">
+                  <a href="{{ post.post.link }}" target="_blank"><b>{{ post.post.title }}</b></a>
+{#                  <p>{{ post.post.full_text }}</p>#}
+              </div>
+                <div class="well">
+                    Cats: {{ post.post.cat_ok }}
+                    Dogs: {{ post.post.dog_ok }}
+                </div>
+          </div>
 
               </div> <!-- end of item -->
               {% endfor %}
