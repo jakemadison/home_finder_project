@@ -27,3 +27,7 @@ html,body {
   height:100%;
   width:100%;
 }
+
+.price_title {
+  margin-bottom: 0;
+}
