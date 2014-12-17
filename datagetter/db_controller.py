@@ -4,6 +4,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "home_finder_project.settings")
 from datagetter.models import Postings, PostingImages
 import django
 django.setup()
+from datagetter import utilities
 
 
 def get_all_links():
@@ -22,11 +23,16 @@ def search_for_link(target_link):
 def get_post_data():
 
     final_array = []
-    post_array = Postings.objects.all().order_by('-insert_date')
+    post_array = Postings.objects.all().order_by('-insert_date')[:10]
 
     for each_post in post_array:
         post_item = {}
         print('each post: {0}'.format(each_post))
+        lat = each_post.lat
+        lon = each_post.lon
+
+        post_item['neighbourhood'] = utilities.get_cool_location_from_points(lat, lon)
+
         post_item['post'] = each_post
         main_image = PostingImages.objects.filter(posting=each_post)
         post_item['image'] = main_image

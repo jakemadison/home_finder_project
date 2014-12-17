@@ -30,6 +30,9 @@
           <span id="id_num">{{ posts.0.post.id }}</span>
               <div class="carousel-caption">
                   <h3><b>${{ posts.0.post.price }}</b>: {{ posts.0.post.title }}</h3>
+                  {% if posts.0.neighbourhood %}
+                  <h4><b>{{ posts.0.neighbourhood }}</b></h4>
+                  {%  endif %}
                 </div> <!-- caption -->
 
           <div class="col-md-8">
@@ -54,6 +57,9 @@
           <span id="id_num">{{ post.post.id }}</span>
                   <div class="carousel-caption">
                         <h3><b>${{ post.post.price }}</b>: {{ post.post.title }}</h3>
+                      {%  if post.neighbourhood %}
+                      <h4><b>{{ post.neighbourhood }}</b></h4>
+                      {% endif %}
                     </div>
 
           <div class="col-md-8">
