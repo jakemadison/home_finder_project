@@ -53,32 +53,40 @@
 
           {% for post in posts|slice:"1:" %}
 
-          <div class="item row">
-          <span id="id_num">{{ post.post.id }}</span>
+          <div class="item">
+<div class="row">
+
+
+{#          <div class="col-md-8">#}
+                {%  for image in post.image|slice:":2" %}
+                    <img src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide">
+                {% endfor %}
+{#          </div>#}
+</div>
+          <div class="row">
+          <div class="well well-large">
+                <span id="id_num">{{ post.post.id }}</span>
                   <div class="carousel-caption">
-                        <h3><b>${{ post.post.price }}</b>: {{ post.post.title }}</h3>
+                        <h3><b>${{ post.post.price }}</b>: {{ post.post.title }}
+                            <a href="{{ post.post.link }}" target="_blank">
+                                <span class="glyphicon glyphicon-share-alt"></span></a></h3>
                       {%  if post.neighbourhood %}
                       <h4><b>{{ post.neighbourhood }}</b></h4>
                       {% endif %}
                     </div>
-
-          <div class="col-md-8">
-                {%  for image in post.image|slice:":1" %}
-                    <img src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide">
-                {% endfor %}
+          </div>
           </div>
 
 
-            <div class="col-md-4">
-              <div class="well info_well">
-                  <a href="{{ post.post.link }}" target="_blank"><b>{{ post.post.title }}</b></a>
+{#              <div class="well info_well">#}
+{#                  <a href="{{ post.post.link }}" target="_blank"><b>{{ post.post.title }}</b></a>#}
 {#                  <p>{{ post.post.full_text }}</p>#}
-              </div>
+{#              </div>#}
                 <div class="well">
                     Cats: {{ post.post.cat_ok }}
                     Dogs: {{ post.post.dog_ok }}
                 </div>
-          </div>
+
 
               </div> <!-- end of item -->
               {% endfor %}
