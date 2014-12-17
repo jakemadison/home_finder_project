@@ -280,7 +280,7 @@ if __name__ == '__main__':
     # pickle_content(test_data_array)
 
 
-    clean_up_delistings()
+    # clean_up_delistings()
 
 
 
@@ -296,8 +296,7 @@ if __name__ == '__main__':
             print()
 
 
-
-    if False:
+    if True:
 
         test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
         link_array = find_links_on_page(source_url)

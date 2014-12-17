@@ -23,7 +23,7 @@ def search_for_link(target_link):
 def get_post_data():
 
     final_array = []
-    post_array = Postings.objects.all().order_by('-insert_date')
+    post_array = Postings.objects.all().order_by('-insert_date')[:10]
 
     for each_post in post_array:
         post_item = {}

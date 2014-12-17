@@ -23,7 +23,7 @@ html,body {
   background-color:#999;
 }
 
-.carousel-inner,.carousel,.item,.container,.fill,.active,.row {
+.carousel-inner,.carousel,.item,.fill,.active,.row {
   height:100%;
   width:100%;
 }
@@ -35,3 +35,7 @@ html,body {
 .delisted_price {
   color: red;
 }
+
+/*.post_images {*/
+  /*height: 50%;*/
+/*}*/
