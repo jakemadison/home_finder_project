@@ -67,7 +67,7 @@
           <div class="well well-large">
                 <span id="id_num">{{ post.post.id }}</span>
                   <div class="carousel-caption">
-                        <h2 class="price_title"><b class="">${{ post.post.price }}</b></h2> <h3>{{ post.post.title }}
+                      <h3>{{ post.post.title }}
                             <a href="{{ post.post.link }}" target="_blank">
                                 <span class="glyphicon glyphicon-share-alt"></span></a></h3>
                       {%  if post.neighbourhood %}
@@ -75,6 +75,11 @@
                           {% else %}
                           <h6><b>lat: {{ post.post.lat }}, lon: {{post.post.lon}}</b></h6>
                       {% endif %}
+                  {% if post.post.delisted %}
+                  <h5 class="delisted_price">This Post has been Delisted :<</h5>
+                  {% endif %}
+                  <h2 class="price_title"><b class="">${{ post.post.price }}</b></h2>
+
                     </div>
           </div>
           </div>

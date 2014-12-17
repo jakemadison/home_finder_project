@@ -237,6 +237,39 @@ def find_links_on_page(url):
 
     # at this point, we should do a check vs the db on most recent, and import new ones..
 
+
+def check_if_delisted(link):
+    print('received link: {0}'.format(link))
+    resp = parse_page_from_link(link)
+
+    parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
+    removal = parsed_page.find('span', {'id': 'has_been_removed'})
+
+    if removal:
+        return True
+    else:
+        return False
+
+
+def clean_up_delistings():
+    qry = Postings.objects.filter(delisted=False).all()
+    all_links = [x.link for x in qry]
+
+    for each in all_links:
+        print('testing link: {0}  ->'.format(each), end='')
+        if check_if_delisted(each):
+            print('posting has been detected as removed')
+            qry = Postings.objects.filter(link=each).first()
+            qry.delisted = True
+            qry.save()
+        else:
+            print('still active.')
+
+        time.sleep(1)
+
+    print('all done.')
+
+
 if __name__ == '__main__':
 
     test_data_array = []
@@ -246,13 +279,21 @@ if __name__ == '__main__':
     # find_links_on_page(source_url)
     # pickle_content(test_data_array)
 
-    test_url = 'http://vancouver.craigslist.ca/van/apa/4799896001.html'
-    p_page = parse_page_from_link(test_url)
-    post_obj = create_posting_from_parsed_link(p_page, skip_db=True)
 
-    for k, v in post_obj.__dict__.iteritems():
-        print('{0} -> {1}'.format(k, v))
-        print()
+    clean_up_delistings()
+
+
+
+
+
+    if False:
+        test_url = 'http://vancouver.craigslist.ca/van/apa/4799896001.html'
+        p_page = parse_page_from_link(test_url)
+        post_obj = create_posting_from_parsed_link(p_page, skip_db=True)
+
+        for k, v in post_obj.__dict__.iteritems():
+            print('{0} -> {1}'.format(k, v))
+            print()
 
 
 

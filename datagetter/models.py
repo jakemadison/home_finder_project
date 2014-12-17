@@ -31,6 +31,8 @@ class Postings(models.Model):
     laundry_available = models.NullBooleanField(null=True, blank=True, default=None)
     w_d_in_unit = models.NullBooleanField(null=True, blank=True, default=None)
 
+    delisted = models.BooleanField(default=False)
+
     def __unicode__(self):
         return 'post instance {0} link: {1} title: {2}'.format(self.id, self.link, self.title)
 

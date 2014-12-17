@@ -31,3 +31,7 @@ html,body {
 .price_title {
   margin-bottom: 0;
 }
+
+.delisted_price {
+  color: red;
+}
