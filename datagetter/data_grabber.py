@@ -282,10 +282,6 @@ if __name__ == '__main__':
 
     # clean_up_delistings()
 
-
-
-
-
     if False:
         test_url = 'http://vancouver.craigslist.ca/van/apa/4799896001.html'
         p_page = parse_page_from_link(test_url)
@@ -295,9 +291,7 @@ if __name__ == '__main__':
             print('{0} -> {1}'.format(k, v))
             print()
 
-
     if True:
-
         test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
         link_array = find_links_on_page(source_url)
         existing_links = db_controller.get_all_links()

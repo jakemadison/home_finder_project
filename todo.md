@@ -94,7 +94,12 @@ let's just add a field on the postings model for "delisted", and update that.
 then current query just ignores delisted records.
 
 
+===
+so apparently there is an angular-js lib for doing exactly what tinder does: 
+https://github.com/gajus/angular-swing/blob/master/examples/card-stack/index.html
 
+I'm still not sure how that would work with mobile vs desktop platforms.
+I don't think it would work for desktop... but it's really cool...
 
 
 
