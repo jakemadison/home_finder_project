@@ -20,7 +20,7 @@ def search_for_link(target_link):
         return False
 
 
-def get_post_data(limit=20):
+def get_post_data(limit=50):
 
     final_array = []
     if limit:
@@ -35,6 +35,7 @@ def get_post_data(limit=20):
         lon = each_post.lon
 
         post_item['neighbourhood'] = utilities.get_cool_location_from_points(lat, lon)
+        post_item['landmark'] = utilities.get_cool_nearby_landmark(lat, lon)
 
         post_item['post'] = each_post
         main_image = PostingImages.objects.filter(posting=each_post)

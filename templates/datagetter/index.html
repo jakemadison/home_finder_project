@@ -64,6 +64,7 @@
                   {% if posts.0.neighbourhood %}
                   <h4><b>{{ posts.0.neighbourhood }}</b></h4>
                   {%  endif %}
+
                 </div> <!-- caption -->
 
           <div class="col-md-8" id="basicExample">
@@ -123,10 +124,12 @@
                             <a href="{{ post.post.link }}" target="_blank">
                                 <span class="glyphicon glyphicon-share-alt"></span></a></h3>
                       {%  if post.neighbourhood %}
-                      <h4><b>{{ post.neighbourhood }}</b></h4>
+                      <h4><b>{{ post.neighbourhood }}</b> ({{ post.landmark }})</h4>
                           {% else %}
-                          <h6><b>lat: {{ post.post.lat }}, lon: {{post.post.lon}}</b></h6>
+                          <h6><b>{{ post.landmark }}</b>  (lat: {{ post.post.lat }}, lon: {{post.post.lon}})</h6>
                       {% endif %}
+
+
                   {% if post.post.delisted %}
                   <h5 class="delisted_price">This Post has been Delisted :<</h5>
                   {% endif %}
