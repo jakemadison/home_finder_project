@@ -56,27 +56,58 @@ def get_nearby_landmark(lat, lon):
     pass
 
 
+def cleanup_media_files():
+    # this is needed because of different dev environments and not wanting to commit my media dir contents.
+    # if there are delisted posts, we're going to still be out of luck, but it's still better than nothing.
+
+    from django.core.files.storage import default_storage
+    from home_finder_project.settings import MEDIA_ROOT
+    from data_grabber import store_images
+
+    test = db.get_post_data(limit=False)
+    missing_images_array = []
+
+    for t in test:
+        for i in t['image']:
+            image_name = i.image_link.split('/')[-1]
+            if not default_storage.exists(MEDIA_ROOT+'/media/'+image_name):
+                print('missing the following media: {0}'.format(image_name))
+                missing_images_array.append({'id': t['post'].id, 'link': [str(i.image_link)]})
+
+    print('collected missing images, sending to DL and store function now...')
+    print(missing_images_array)
+
+    for m in missing_images_array:
+        store_images(m['id'], m['link'])
+
+
+
+
 if __name__ == "__main__":
+
     from datagetter import db_controller as db
-    latitude = 49.212217
-    longitude = -123.065862
 
-    # latitude = 49.282404
-    # longitude = -123.130255
-    top_left = '49.291249, -123.147937'
-    bottom_right = '49.276132, -123.108626'
-
-    test = db.get_post_data(100)
-
-    print('--------')
-
-    for each in test:
-        # print(each['post'].lat, each['post'].lon)
-        print(get_cool_location_from_points(each['post'].lat, each['post'].lon))
+    cleanup_media_files()
 
 
+    if False:
+        latitude = 49.212217
+        longitude = -123.065862
 
-    # result = get_cool_location_from_points(latitude, longitude)
-    # print(result)
+        # latitude = 49.282404
+        # longitude = -123.130255
+        top_left = '49.291249, -123.147937'
+        bottom_right = '49.276132, -123.108626'
+
+        test = db.get_post_data(100)
+
+        print('--------')
+
+        for each in test:
+            # print(each['post'].lat, each['post'].lon)
+            print(get_cool_location_from_points(each['post'].lat, each['post'].lon))
 
 
+
+        # result = get_cool_location_from_points(latitude, longitude)
+        # print(result)

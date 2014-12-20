@@ -23,7 +23,10 @@ def search_for_link(target_link):
 def get_post_data(limit=20):
 
     final_array = []
-    post_array = Postings.objects.all().order_by('-post_date')[:limit]
+    if limit:
+        post_array = Postings.objects.all().order_by('-post_date')[:limit]
+    else:
+        post_array = Postings.objects.all().order_by('-post_date')
 
     for each_post in post_array:
         post_item = {}

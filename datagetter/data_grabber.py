@@ -162,7 +162,7 @@ def create_posting_from_parsed_link(resp, skip_db=False):
     # write our record to the DB
     new_posting.save()
 
-    # try and grab photos
+    # try and grab photo links:
     img_links_array = []
     script_tags = parsed_page.findAll('script')
     for each_script in script_tags:
@@ -173,21 +173,9 @@ def create_posting_from_parsed_link(resp, skip_db=False):
                     img_links_array.append(each_var)
 
     if img_links_array:
-        for each_image_link in img_links_array:
-            print('adding image: {0}'.format(each_image_link))
-            new_image = PostingImages()
-            new_image.image_link = each_image_link
-            new_image.posting_id = new_posting.id
+        store_images(new_posting.id, img_links_array)
 
-            r = requests.get(each_image_link)
-            img_temp = NamedTemporaryFile(delete=True)
-            img_temp.write(r.content)
-            img_temp.flush()
-
-            new_image.image_data.save(each_image_link, File(img_temp))
-            time.sleep(1)
-
-    print('========')
+    print('========Done.')
     # print(parsed_page)
     #
     # raise
@@ -200,13 +188,34 @@ def create_posting_from_parsed_link(resp, skip_db=False):
     #               v.encode('utf-8'))
     #     print()
 
-        # print(parsed_page)
-        # raise
+    # print(parsed_page)
+    # raise
 
     # now we need to grab all of our relevant data off of the parsed page
     #
 
     # then we'll send that data off to the DB to get inserted
+
+
+def store_images(posting_id, img_link_array):
+
+    """given a set of images and a posting id as a FK, download and store images"""
+
+    for each_image_link in img_link_array:
+        print('adding image: {0}'.format(each_image_link))
+        new_image = PostingImages()
+        new_image.image_link = each_image_link
+        new_image.posting_id = posting_id
+
+        r = requests.get(each_image_link)
+        img_temp = NamedTemporaryFile(delete=True)
+        img_temp.write(r.content)
+        img_temp.flush()
+
+        new_image.image_data.save(each_image_link, File(img_temp))
+        time.sleep(1)
+
+
 
 
 def parse_page_from_link(link):
