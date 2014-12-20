@@ -16,3 +16,12 @@ def index(request):
     return render_to_response('datagetter/index.html', context_dict, context)
 
     # return HttpResponse("Craigs Data Grabber will go here...")
+
+
+def mobile_index(request):
+
+    context = RequestContext(request)
+
+    context_dict = {'boldmessage': "Craigs Mobile Data Grabber will go here..."}
+
+    return render_to_response('datagetter/mobile.html', context_dict, context)
