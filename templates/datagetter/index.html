@@ -94,7 +94,7 @@
 
               <div class="row" id="basic2">
 {#          <div class="col-md-8">#}
-                {%  for image in post.image|slice:":10" %}
+                {%  for image in post.image|slice:":3" %}
                    <a><img src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide" class="post_images"></a>
                 {% endfor %}
 {#          </div>#}

@@ -29,6 +29,8 @@ def get_cool_location_from_points(lat, lon):
     neighbourhood_array.append(Neighbourhood('Davie Street', 49.286323, -123.142272, 49.279492, -123.128367))
     neighbourhood_array.append(Neighbourhood('Coal Harbour', 49.292425, -123.135577, 49.287946, -123.115750))
     neighbourhood_array.append(Neighbourhood('Yaletown', 49.277056, -123.126136, 49.275768, -123.112746))
+    neighbourhood_array.append(Neighbourhood('Stanley Park', 49.294720, -123.151971, 49.293433, -123.128796))
+    neighbourhood_array.append(Neighbourhood('Downtown', 49.284979, -123.145619, 49.275404, -123.106910))
     neighbourhood_array.append(Neighbourhood('Strathcona', 49.284391, -123.099786, 49.272072, -123.077555))
     neighbourhood_array.append(Neighbourhood('Commercial Drive', 49.281088, -123.073779, 49.259470, -123.065196))
     neighbourhood_array.append(Neighbourhood('Kensington/CedarCottage', 49.259639, -123.096867, 49.242271, -123.057643))
