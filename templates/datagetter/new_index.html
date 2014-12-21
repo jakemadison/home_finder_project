@@ -26,6 +26,7 @@
 
   <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
 
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -37,13 +38,16 @@
           </button>
           <a class="navbar-brand" href="#">The Home Finder Project</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav pull-right">
-            <li class="active"><a href="#">All Posts</a></li>
 
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">All Posts</a></li>
+            <li><a href="#">New Posts</a></li>
+          <li><a href="#">Saved Posts</a></li>
           </ul>
 
         </div><!--/.nav-collapse -->
+        </div>
     </nav>
 
 
@@ -51,7 +55,7 @@
 
   <div class="Collage" id="basicExample">
       {% for image in posts.0.image|slice:":7" %}
-        <a><img src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide" width="50%"></a>
+        <a><img class="post_images" src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide" width="50%"></a>
       {% endfor %}
   </div>
 

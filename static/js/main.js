@@ -16,8 +16,8 @@ console.log("main.js is running now...");
 $(".Collage").justifiedGallery({
     randomize: true,
     margins: 2,
-    rowHeight: 400,
-    lastRow : 'justify',
+    rowHeight: 200,
+    //lastRow : 'hide',
     fixedHeight: true
 
 }).on('jg.complete', function (e) {
