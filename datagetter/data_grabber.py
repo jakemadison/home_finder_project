@@ -223,11 +223,16 @@ def parse_page_from_link(link):
     """take in a link, get requests to give us the html content, parse it with beautiful soup to extract
     our required info."""
 
+    resp = None
+
     try:
         resp = requests.get(link, timeout=5)
         resp.raise_for_status()  # <- no-op if status!=200
     except Exception, e:
-        print('i died while parsing the link :<')
+        if resp and resp.status_code == 404:
+            return 'delisted'  # this is going to cause problems...
+
+        print('i died while parsing the link :<', e)
         return False
 
     # test_data_array.append(resp)
@@ -250,6 +255,9 @@ def find_links_on_page(url):
 def check_if_delisted(link):
     print('received link: {0}'.format(link))
     resp = parse_page_from_link(link)
+
+    if resp == 'delisted':
+        return True
 
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)
     removal = parsed_page.find('span', {'id': 'has_been_removed'})

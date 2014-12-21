@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Data Getter</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+        <script src="{% static "js/jquery.justifiedGallery.min.js" %}"></script>
+        <script src="{% static "js/jquery.collagePlus.js" %}"></script>
+
+        <link href="{% static "css/justifiedGallery.min.css" %}" rel="stylesheet">
+        <link href="{% static "css/transitions.css" %}" rel="stylesheet">
+            <!-- Custom styles for this template -->
+    <link href="{% static "css/carousel.css" %}" rel="stylesheet">
+    <link href="{% static "css/main.css" %}" rel="stylesheet">
+    </head>
+
+  <body>
+
+  <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                  data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">The Home Finder Project</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li class="active"><a href="#">All Posts</a></li>
+
+          </ul>
+
+        </div><!--/.nav-collapse -->
+    </nav>
+
+
+<div class="main_div">
+
+  <div class="Collage" id="basicExample">
+      {% for image in posts.0.image|slice:":7" %}
+        <a><img src="{{ MEDIA_URL }}{{ image.image_data }}" alt="First slide" width="50%"></a>
+      {% endfor %}
+  </div>
+
+
+  <h3>{{ posts.0.post.title }} <a href="{{ posts.0.post.link }}" target="_blank">
+                                <span class="glyphicon glyphicon-share-alt"></span></a></h3>
+
+    {%  if posts.0.neighbourhood %}
+      <h4><b>{{ posts.0.neighbourhood }}</b> ({{ posts.0.landmark }})</h4>
+              {% else %}
+          <h6><b>{{ posts.0.landmark }}</b>  (lat: {{ posts.0.post.lat }}, lon: {{posts.0.post.lon}})</h6>
+    {% endif %}
+
+
+  {% if post.post.delisted %}
+      <h5 class="delisted_price">This Post has been Delisted :<</h5>
+  {% endif %}
+  <h2 class="price_title"><b class="">${{ posts.0.post.price }}</b></h2>
+
+
+
+
+</div> <!-- end of main div -->
+
+
+
+
+
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<script src="{% static "js/main.js" %}"></script>
+
+    </body>
+</html>

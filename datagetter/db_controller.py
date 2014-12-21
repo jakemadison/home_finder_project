@@ -24,9 +24,11 @@ def get_post_data(limit=50):
 
     final_array = []
     if limit:
-        post_array = Postings.objects.all().order_by('-post_date')[:limit]
+        # post_array = Postings.objects.all().order_by('-post_date')[:limit]
+        post_array = Postings.objects.all().order_by('?')[:limit]
     else:
-        post_array = Postings.objects.all().order_by('-post_date')
+        # post_array = Postings.objects.all().order_by('-post_date')
+        post_array = Postings.objects.all().order_by('?')
 
     for each_post in post_array:
         post_item = {}
