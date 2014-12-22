@@ -17,3 +17,19 @@ $(".Collage").justifiedGallery({
 }).on('jg.complete', function (e) {
     console.log('on complete');
 });
+
+
+$('#like_btn').on("click", function() {
+    console.log('clicked! --> post: ');
+    $.post("/like_post", function(result) {
+        console.log("resulted!", result);
+        location.reload(false);
+    })
+});
+
+
+$('#next_btn').on("click", function() {
+    console.log('clicked!');
+    location.reload(false);
+
+});
