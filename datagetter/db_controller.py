@@ -20,7 +20,7 @@ def search_for_link(target_link):
         return False
 
 
-def get_post_data(limit=1, without_ratings=False):
+def get_post_data(limit=10, without_ratings=False):
 
     final_array = []
 
@@ -50,10 +50,10 @@ def get_post_data(limit=1, without_ratings=False):
 
 
 def rate_posting(post_id, liked):
-    post = Postings.objects.filter(id=int(post_id)).all()
+    post = Postings.objects.filter(id=int(post_id))[:1].get()
     print(post)
-    post[0].positive_rated = liked
-    post[0].save()
+    post.positive_rated = liked
+    post.save()
 
     rating_record = PostingRating()
     rating_record.posting_id = int(post_id)
@@ -64,6 +64,6 @@ def rate_posting(post_id, liked):
 if __name__ == "__main__":
     # link_found = search_for_link('http://test.com/')
     # print(link_found)
-    # rate_posting(20, True)
+    # rate_posting(20, None)
     data = get_post_data(without_ratings=True)
     print(data)
