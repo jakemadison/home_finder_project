@@ -19,9 +19,19 @@ $(".Collage").justifiedGallery({
 });
 
 
-$('#like_btn').on("click", function() {
-    console.log('clicked! --> post: ');
-    $.post("/like_post", function(result) {
+$('.rating_btn').on("click", function() {
+    console.log('clicked! --> post: ', POST_ID);
+
+    var rating_type;
+
+    if (this.id == 'like_btn') {
+        rating_type = 'like';
+    }
+    else {
+        rating_type = 'dislike';
+    }
+
+    $.post("rate_post", {'post_id': POST_ID, 'rating_type': rating_type}, function(result) {
         console.log("resulted!", result);
         location.reload(false);
     })
@@ -31,5 +41,4 @@ $('#like_btn').on("click", function() {
 $('#next_btn').on("click", function() {
     console.log('clicked!');
     location.reload(false);
-
 });

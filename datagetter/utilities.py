@@ -1,5 +1,4 @@
 from __future__ import print_function
-import math
 from math import radians, cos, sin, asin, sqrt
 
 # this should really all be stored in the data model, instead of stupidly calculated on the fly.
@@ -179,19 +178,23 @@ def cleanup_media_files():
     test = db.get_post_data(limit=False)
     missing_images_array = []
 
+    image_total_count = 0
+
     for t in test:
         for i in t['image']:
             image_name = i.image_link.split('/')[-1]
             if not default_storage.exists(MEDIA_ROOT+'/media/'+image_name):
                 print('missing the following media: {0}'.format(image_name))
+                image_total_count += 1
                 missing_images_array.append({'id': t['post'].id, 'link': [str(i.image_link)]})
 
     print('collected missing images, sending to DL and store function now...')
     print(missing_images_array)
 
     for m in missing_images_array:
+        print(image_total_count, end=' -> ')
         store_images(m['id'], m['link'])
-
+        image_total_count -= 1
 
 
 
@@ -199,7 +202,7 @@ if __name__ == "__main__":
 
     from datagetter import db_controller as db
 
-    # cleanup_media_files()
+    cleanup_media_files()
 
 
     # should be 800 meters...

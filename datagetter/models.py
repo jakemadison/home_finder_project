@@ -33,6 +33,8 @@ class Postings(models.Model):
 
     delisted = models.BooleanField(default=False)
 
+    positive_rated = models.NullBooleanField(null=True, blank=True, default=None)
+
     def __unicode__(self):
         return 'post instance {0} link: {1} title: {2}'.format(self.id, self.link, self.title)
 

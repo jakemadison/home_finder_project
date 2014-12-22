@@ -1,7 +1,7 @@
 from __future__ import print_function
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "home_finder_project.settings")
-from datagetter.models import Postings, PostingImages
+from datagetter.models import Postings, PostingImages, PostingRating
 import django
 django.setup()
 from datagetter import utilities
@@ -20,15 +20,17 @@ def search_for_link(target_link):
         return False
 
 
-def get_post_data(limit=50):
+def get_post_data(limit=1, without_ratings=False):
 
     final_array = []
+
+    post_array = Postings.objects.all().order_by('?')
+
+    if without_ratings:
+        post_array = post_array.filter(positive_rated=None)
+
     if limit:
-        # post_array = Postings.objects.all().order_by('-post_date')[:limit]
-        post_array = Postings.objects.all().order_by('?')[:limit]
-    else:
-        # post_array = Postings.objects.all().order_by('-post_date')
-        post_array = Postings.objects.all().order_by('?')
+        post_array = post_array[:limit]
 
     for each_post in post_array:
         post_item = {}
@@ -47,8 +49,21 @@ def get_post_data(limit=50):
     return final_array
 
 
+def rate_posting(post_id, liked):
+    post = Postings.objects.filter(id=int(post_id)).all()
+    print(post)
+    post[0].positive_rated = liked
+    post[0].save()
+
+    rating_record = PostingRating()
+    rating_record.posting_id = int(post_id)
+    rating_record.positive_rating = liked
+    rating_record.save()
+
+
 if __name__ == "__main__":
     # link_found = search_for_link('http://test.com/')
     # print(link_found)
-    data = get_post_data()
+    # rate_posting(20, True)
+    data = get_post_data(without_ratings=True)
     print(data)

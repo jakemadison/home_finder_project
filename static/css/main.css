@@ -4,6 +4,10 @@ html,body {
 }
 
 
+.main_div {
+    height:100px;
+}
+
 
 .price_title {
   margin-bottom: 0;
@@ -19,11 +23,10 @@ html,body {
 
 
 
-
-
 .Collage{
   max-width: 50%;
-  max-height: 600px;
+        height:80vh;
+  /*max-height: 600px;*/
     /*max-height: 90%;*/
     float: left;
 

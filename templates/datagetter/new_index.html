@@ -20,9 +20,22 @@
             <!-- Custom styles for this template -->
     <link href="{% static "css/carousel.css" %}" rel="stylesheet">
     <link href="{% static "css/main.css" %}" rel="stylesheet">
+
+
+<script type='text/javascript'>
+    POST_ID = {{ posts.0.post.id }};
+</script>
+
+
     </head>
 
+
+
   <body>
+
+
+
+  <div class="main_div">
 
   <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -51,7 +64,7 @@
     </nav>
 
 
-<div class="main_div">
+
 
   <div class="Collage" id="basicExample">
       {% for image in posts.0.image|slice:":7" %}
@@ -76,8 +89,8 @@
   <h2 class="price_title"><b class="">${{ posts.0.post.price }}</b></h2>
 
 <div class="btn-group btn-group-lg" role="group">
-  <button type="button" class="btn btn-success" id="like_btn">Like</button>
-  <button type="button" class="btn btn-warning" id="dislike_btn">Dislike</button>
+  <button type="button" class="btn btn-success rating_btn" id="like_btn">Like</button>
+  <button type="button" class="btn btn-warning rating_btn" id="dislike_btn">Dislike</button>
   <button type="button" class="btn btn-primary" id="next_btn">Next</button>
 </div>
 
