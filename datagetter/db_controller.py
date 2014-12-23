@@ -61,6 +61,12 @@ def rate_posting(post_id, liked):
     rating_record.save()
 
 
+def get_count_of_new_listings():
+    post_count = Postings.objects.filter(positive_rated=None).count()
+    save_count = Postings.objects.filter(positive_rated=True).count()
+    return post_count, save_count
+
+
 if __name__ == "__main__":
     # link_found = search_for_link('http://test.com/')
     # print(link_found)

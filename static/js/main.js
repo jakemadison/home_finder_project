@@ -42,3 +42,15 @@ $('#next_btn').on("click", function() {
     console.log('clicked!');
     location.reload(false);
 });
+
+
+$.get('get_count', function(data) {
+
+    console.log(data);
+    $('.post_count').text(data['post_count']);
+    $('.save_count').text(data['save_count']);
+
+
+});
+
+
