@@ -69,6 +69,12 @@ def create_posting_from_parsed_link(resp, skip_db=False):
             if price:
                 price = price[0]  # whatever the first one is in the list
 
+                if '.' in price:
+                    price = price.split('.')[0]
+
+                if '/' in price:
+                    price = price.split('/')[0]
+
                 try:
                     new_posting.price = int(price[1:])  # get rid of $, and int to our object
                 except ValueError, v:
