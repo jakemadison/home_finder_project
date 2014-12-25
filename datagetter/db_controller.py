@@ -20,7 +20,7 @@ def search_for_link(target_link):
         return False
 
 
-def get_post_data(limit=10, without_ratings=False):
+def get_post_data(limit=10, without_ratings=False, saved=False):
 
     final_array = []
 
@@ -28,6 +28,9 @@ def get_post_data(limit=10, without_ratings=False):
 
     if without_ratings:
         post_array = post_array.filter(positive_rated=None)
+
+    if saved:
+        post_array = post_array.filter(positive_rated=True)
 
     if limit:
         post_array = post_array[:limit]
