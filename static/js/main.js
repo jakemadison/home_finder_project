@@ -19,6 +19,19 @@ $(".Collage").justifiedGallery({
 });
 
 
+
+$('#spam_btn').on("click", function() {
+    console.log('clicked! --> post: ', POST_ID);
+
+    $.post("delete_post", {'post_id': POST_ID}, function(result) {
+        console.log("resulted!", result);
+        location.reload(false);
+    })
+});
+
+
+
+
 $('.rating_btn').on("click", function() {
     console.log('clicked! --> post: ', POST_ID);
 
@@ -36,6 +49,10 @@ $('.rating_btn').on("click", function() {
         location.reload(false);
     })
 });
+
+
+
+
 
 
 $('#next_btn').on("click", function() {

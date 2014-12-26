@@ -303,7 +303,7 @@ if __name__ == '__main__':
     # pickle_content(test_data_array)
 
 
-    # clean_up_delistings()
+    clean_up_delistings()
 
     if False:
         test_url = 'http://vancouver.craigslist.ca/van/apa/4799896001.html'
@@ -314,7 +314,9 @@ if __name__ == '__main__':
             print('{0} -> {1}'.format(k, v))
             print()
 
-    if True:
+
+    # grab new listings with this one for now...
+    if False:
         test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
         link_array = find_links_on_page(source_url)
         existing_links = db_controller.get_all_links()

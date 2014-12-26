@@ -70,6 +70,12 @@ def get_count_of_new_listings():
     return post_count, save_count
 
 
+def delete_posting(post_id):
+    print('made it to delete post with {0}'.format(post_id))
+    Postings.objects.filter(id=post_id).delete()
+
+
+
 if __name__ == "__main__":
     # link_found = search_for_link('http://test.com/')
     # print(link_found)

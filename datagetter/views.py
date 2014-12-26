@@ -84,4 +84,20 @@ def rate_post(request):
 @require_http_methods(["GET", "POST"])
 def get_count(request):
     post_count, save_count = db_controller.get_count_of_new_listings()
-    return HttpResponse(json.dumps({'message': 'success', 'post_count': post_count, 'save_count': save_count}), content_type="application/json")
+    return HttpResponse(json.dumps({'message': 'success', 'post_count': post_count, 'save_count': save_count}),
+                        content_type="application/json")
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def delete_post(request):
+
+    print('made it to del post view....')
+
+    post_id = request.POST.get('post_id', '')
+
+    print('i received the following value: {0}'.format(post_id), end="\n\n\n")
+
+    db_controller.delete_posting(post_id)
+
+    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
