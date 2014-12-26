@@ -89,9 +89,24 @@
   <h2 class="price_title"><b class="">${{ posts.0.post.price }}</b></h2>
 
 <div class="btn-group btn-group-lg" role="group">
+
+    {% if posts.0.post.positive_rated == None %}
   <button type="button" class="btn btn-success rating_btn" id="like_btn">Like</button>
   <button type="button" class="btn btn-warning rating_btn" id="dislike_btn">Dislike</button>
   <button type="button" class="btn btn-primary" id="next_btn">Next</button>
+    {% elif posts.0.post.positive_rated == True %}
+      <button type="button" class="btn btn-success rating_btn active" id="like_btn">Like</button>
+  <button type="button" class="btn btn-warning rating_btn" id="dislike_btn">Dislike</button>
+  <button type="button" class="btn btn-primary" id="next_btn">Next</button>
+
+    {% else %}
+      <button type="button" class="btn btn-success rating_btn" id="like_btn">Like</button>
+  <button type="button" class="btn btn-warning rating_btn active" id="dislike_btn">Dislike</button>
+  <button type="button" class="btn btn-primary" id="next_btn">Next</button>
+
+
+    {% endif %}
+
 </div>
 
 
