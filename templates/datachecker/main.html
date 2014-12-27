@@ -5,6 +5,14 @@
     <title></title>
 </head>
 <body>
-daaaata checker.......
+daaaata checker....... <br>
+
+{% for p in post %}
+title: {{ p.title }} <br>
+id: {{ p.id }} <br>
+full: {{ p.full_text }} <br>
+{% endfor %}
+
+
 </body>
 </html>
