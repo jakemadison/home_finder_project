@@ -117,10 +117,30 @@
 
     {% endif %}
 
+
+            {% if posts.0.post.cat_ok == True %}
+          <div class="icons"><img src="{% static "assets/cat.png" %}"></div>
+          {% endif %}
+            {% if posts.0.post.dog_ok == True %}
+            <div class="icons"><img src="{% static "assets/dog.png" %}"></div>
+          {% endif %}
+        {% if posts.0.post.cat_ok == False and posts.0.post.cat_ok == False %}
+        <div class="icons"><img src="{% static "assets/nopets.jpg" %}"></div>
+        {% endif %}
+        {% if posts.0.post.smoking == False %}
+            <div class="icons"><img src="{% static "assets/nosmoking.gif" %}"></div>
+        {% endif %}
+        {% if posts.0.post.laundry_available == True or posts.0.post.w_d_in_unit %}
+          <div class="icons"><img src="{% static "assets/washer.png" %}"></div>
+        {% endif %}
+
+
+
 </div>
 <button type="button" class="btn btn-danger btn-xs" id="spam_btn">spam?</button>
 
   <div class="well-sm">
+      <b>{{ posts.0.post.id }}</b>
       {{ posts.0.post.full_text }}
 
   </div>

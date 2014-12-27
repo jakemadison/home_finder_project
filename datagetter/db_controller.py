@@ -20,7 +20,7 @@ def search_for_link(target_link):
         return False
 
 
-def get_post_data(limit=10, without_ratings=False, saved=False):
+def get_post_data(limit=1, without_ratings=False, saved=False):
 
     final_array = []
 

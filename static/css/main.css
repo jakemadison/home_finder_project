@@ -21,6 +21,21 @@ html,body {
   height: 50%;
 }
 
+.icons {
+    width: 30px;
+    height: auto;
+    float: left;
+}
+
+.icons img {
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.full_text {
+    float: left;
+}
 
 
 .Collage{
