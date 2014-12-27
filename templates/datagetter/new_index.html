@@ -54,9 +54,20 @@
 
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+
+        {% if type == 'all' %}
             <li class="active"><a href="all_posts">All Posts</a></li>
             <li><a href="new">New Posts <span class="badge post_count">-</span></a></li>
-          <li><a href="saved_posts">Saved Posts <span class="badge save_count">-</span></a></li>
+            <li><a href="saved_posts">Saved Posts <span class="badge save_count">-</span></a></li>
+        {% elif type == 'new' %}
+            <li><a href="all_posts">All Posts</a></li>
+            <li class="active"><a href="new">New Posts <span class="badge post_count">-</span></a></li>
+            <li><a href="saved_posts">Saved Posts <span class="badge save_count">-</span></a></li>
+        {% elif type == 'saved' %}
+            <li><a href="all_posts">All Posts</a></li>
+            <li><a href="new">New Posts <span class="badge post_count">-</span></a></li>
+            <li class="active"><a href="saved_posts">Saved Posts <span class="badge save_count">-</span></a></li>
+        {% endif %}
           </ul>
 
         </div><!--/.nav-collapse -->
@@ -109,6 +120,10 @@
 </div>
 <button type="button" class="btn btn-danger btn-xs" id="spam_btn">spam?</button>
 
+  <div class="well-sm">
+      {{ posts.0.post.full_text }}
+
+  </div>
 
 
 </div> <!-- end of main div -->

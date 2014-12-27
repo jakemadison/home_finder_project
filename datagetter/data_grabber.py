@@ -69,6 +69,9 @@ def create_posting_from_parsed_link(resp, skip_db=False):
             if price:
                 price = price[0]  # whatever the first one is in the list
 
+                s = re.search(r"\d+(\.\d+)?", price)
+                price = s.group(0)
+
                 if '.' in price:
                     price = price.split('.')[0]
 
@@ -81,11 +84,17 @@ def create_posting_from_parsed_link(resp, skip_db=False):
                     print('could not get price.  probably a typo: {0}, {1}'.format(price, v))
                     new_posting.price = None
             else:  # still no price.. get any $ from posting title text
-                price = [x for x in posting_title.text.split(' ') if '$' in x]
-                if price:
-                    price = price[0]  # first one in the list
-                    price = price[1:]  # get rid of $
+                prices = [x for x in posting_title.text.split(' ') if '$' in x]
+
+                if prices:
+                    print(prices)
+                    price = prices[0]  # first one in the list
+                    s = re.search(r"\d+(\.\d+)?", price)
+                    price = s.group(0)
+                    if '.' in price:
+                        price = price.split(".")[0]
                     new_posting.price = int(price)
+
                 else:
                     new_posting.price = None
 
@@ -121,8 +130,13 @@ def create_posting_from_parsed_link(resp, skip_db=False):
         # if we STILL don't have price, try and get it from the full text:
         if new_posting.price is None:
             prices = [x for x in stripped_text.split(' ') if '$' in x]
-            price = prices[0]
-            new_posting.price = int(price[1:])
+            if prices:
+                price = prices[0]
+                s = re.search(r"\d+(\.\d+)?", price)
+                price = s.group(0)
+                if '.' in price:
+                    price = price.split(".")[0]
+                new_posting.price = int(price[1:])
 
         if 'no pets' in stripped_text.lower():
             new_posting.cat_ok = False

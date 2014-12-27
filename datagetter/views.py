@@ -27,7 +27,7 @@ def new_index(request):
     context = RequestContext(request)
     posts = db_controller.get_post_data(without_ratings=True)
     context_dict = {'boldmessage': "Craigs Data Grabber will go here...",
-                    'posts': posts}
+                    'posts': posts, 'type': 'new'}
 
     return render_to_response('datagetter/new_index.html', context_dict, context)
 
@@ -36,7 +36,7 @@ def saved_posts(request):
     context = RequestContext(request)
     posts = db_controller.get_post_data(without_ratings=False, saved=True)
     context_dict = {'boldmessage': "Craigs Data Grabber will go here...",
-                    'posts': posts}
+                    'posts': posts, 'type': 'saved'}
 
     return render_to_response('datagetter/new_index.html', context_dict, context)
 
@@ -45,10 +45,9 @@ def all_posts(request):
     context = RequestContext(request)
     posts = db_controller.get_post_data(without_ratings=False, saved=False)
     context_dict = {'boldmessage': "Craigs Data Grabber will go here...",
-                    'posts': posts}
+                    'posts': posts, 'type': 'all'}
 
     return render_to_response('datagetter/new_index.html', context_dict, context)
-
 
 
 def mobile_index(request):
