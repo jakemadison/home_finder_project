@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'home_finder',
     'datagetter',
     'djangular',
+    'datachecker',
 )
 
 MIDDLEWARE_CLASSES = (
