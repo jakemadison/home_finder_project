@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^datagetter/', include('datagetter.urls')),
+                       url(r'^datachecker/', include('datachecker.urls')),
                        )
 
 if settings.DEBUG:
