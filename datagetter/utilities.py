@@ -69,7 +69,8 @@ def get_cool_location_from_points(lat, lon):
     neighbourhood_array.append(Neighbourhood('Downtown', 49.284979, -123.145619, 49.275404, -123.106910))
     neighbourhood_array.append(Neighbourhood('Strathcona', 49.284391, -123.099786, 49.272072, -123.077555))
     neighbourhood_array.append(Neighbourhood('Commercial Drive', 49.281088, -123.073779, 49.259470, -123.065196))
-    neighbourhood_array.append(Neighbourhood('Kensington/CedarCottage', 49.259639, -123.096867, 49.242271, -123.057643))
+    neighbourhood_array.append(Neighbourhood('Kensington/CedarCottage', 49.259639, -123.096867,
+                                             49.242271, -123.057643))
     neighbourhood_array.append(Neighbourhood('W. Point Grey', 49.277896, -123.224669, 49.258070, -123.175917))
     neighbourhood_array.append(Neighbourhood('Kitsalano', 49.273089, -123.184895, 49.257770, -123.139469))
     neighbourhood_array.append(Neighbourhood('Hastings Sunrise', 49.286547, -123.103820, 49.274341, -123.033953))

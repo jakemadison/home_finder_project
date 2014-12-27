@@ -75,10 +75,27 @@ def delete_posting(post_id):
     Postings.objects.filter(id=post_id).delete()
 
 
+def check_for_existing(post):
+    """some real dicks love just reposting the same shit with different links and post IDs, which is going
+    to skew the fuck out of our ML results."""
+    title = str(post.title)
+    title_array = [str(p.title) for p in Postings.objects.all()]
+    if title in title_array:
+        print('same title')
+        print(post.link)
+        existing_full_text = Postings.objects.filter(title=title)[:1].get()
+        if existing_full_text.full_text == post.full_text:
+            print('BASTARDS!')
+            return True
+
+    return False
+
 
 if __name__ == "__main__":
     # link_found = search_for_link('http://test.com/')
     # print(link_found)
     # rate_posting(20, None)
-    data = get_post_data(without_ratings=True)
-    print(data)
+    # data = get_post_data(without_ratings=True)
+    # print(data)
+    p_trial = get_post_data()
+    check_for_existing(p_trial[0])

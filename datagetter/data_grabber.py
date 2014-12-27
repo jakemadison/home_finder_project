@@ -52,6 +52,7 @@ def create_posting_from_parsed_link(resp, skip_db=False):
         title = parsed_page.find('title').text.encode('utf-8')
         new_posting.title = title
 
+
         housing_type = posting_title.find('span', {"class": 'housing'})
 
         if housing_type:
@@ -144,6 +145,9 @@ def create_posting_from_parsed_link(resp, skip_db=False):
 
         if 'no smoking' in stripped_text.lower():
             new_posting.smoking = False
+
+    if db_controller.check_for_existing(new_posting):  # hopefully, this will nix out duplicates....
+        return False
 
     # get the attributes of the post, dogs, cats, washer/dryer, etc.
     post_attributes = parsed_page.find("p", {"class": "attrgroup"}).findAll("span")
