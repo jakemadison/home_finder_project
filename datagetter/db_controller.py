@@ -78,6 +78,9 @@ def delete_posting(post_id):
 def check_for_existing(post):
     """some real dicks love just reposting the same shit with different links and post IDs, which is going
     to skew the fuck out of our ML results."""
+
+    # crap.  what about those marked as delisted?  Should we just consider them not delisted?
+    # and then just update the link for delist checking/external linking?
     title = str(post.title)
     title_array = [str(p.title) for p in Postings.objects.all()]
     if title in title_array:
@@ -86,6 +89,9 @@ def check_for_existing(post):
         existing_full_text = Postings.objects.filter(title=title)[:1].get()
         if existing_full_text.full_text == post.full_text:
             print('BASTARDS!')
+            existing_full_text.delisted = False
+            existing_full_text.link = post.link
+            existing_full_text.save()
             return True
 
     return False
