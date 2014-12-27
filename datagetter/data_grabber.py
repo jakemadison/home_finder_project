@@ -257,7 +257,7 @@ def parse_page_from_link(link):
             return 'delisted'  # this is going to cause problems...
 
         print('i died while parsing the link :<', e)
-        return False
+        return 'dead'  # fuck it.  let's just kill all dead responses even though this includes timeouts
 
     # test_data_array.append(resp)
 
@@ -280,7 +280,7 @@ def check_if_delisted(link):
     print('received link: {0}'.format(link))
     resp = parse_page_from_link(link)
 
-    if resp == 'delisted':
+    if resp == 'delisted' or resp == 'dead':
         return True
 
     parsed_page = BeautifulSoup(resp.content, from_encoding=resp.encoding)

@@ -37,6 +37,10 @@ html,body {
     float: left;
 }
 
+.delisted {
+    text-decoration: line-through;
+}
+
 
 .Collage{
   max-width: 50%;

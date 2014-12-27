@@ -83,8 +83,9 @@
       {% endfor %}
   </div>
 
-
-  <h3>{{ posts.0.post.title }} <a href="{{ posts.0.post.link }}" target="_blank">
+    {% if posts.0.post.delisted %} <h3 class="delisted"> {% else %} <h3> {% endif %}
+  {{ posts.0.post.title }}
+      <a href="{{ posts.0.post.link }}" target="_blank">
                                 <span class="glyphicon glyphicon-share-alt"></span></a></h3>
 
     {%  if posts.0.neighbourhood %}

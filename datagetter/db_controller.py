@@ -26,7 +26,7 @@ def get_post_data(limit=1, without_ratings=False, saved=False):
 
     post_array = Postings.objects.all().order_by('?')
 
-    if without_ratings:
+    if without_ratings:  # this is for rating of new listings.  Include delists, because we want more data.
         post_array = post_array.filter(positive_rated=None)
 
     if saved:
