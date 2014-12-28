@@ -50,6 +50,15 @@ $('.rating_btn').on("click", function() {
     })
 });
 
+$('.refresh_icon').on("click", function() {
+   console.log('refresh button has been activated');
+
+    //$.get("refresh_post", function(result) {
+    //
+    //})
+
+});
+
 
 
 

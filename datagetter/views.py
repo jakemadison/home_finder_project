@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 import db_controller
+import data_grabber
 # Create your views here.
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
@@ -98,5 +99,14 @@ def delete_post(request):
     print('i received the following value: {0}'.format(post_id), end="\n\n\n")
 
     db_controller.delete_posting(post_id)
+
+    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
+
+
+def refresh_posts(request):
+
+    print('made it to refresh view....')
+    data_grabber.refresh_all_postings()
+    print('all done!')
 
     return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")

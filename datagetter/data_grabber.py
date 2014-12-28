@@ -240,8 +240,6 @@ def store_images(posting_id, img_link_array):
         time.sleep(1)
 
 
-
-
 def parse_page_from_link(link):
 
     """take in a link, get requests to give us the html content, parse it with beautiful soup to extract
@@ -311,15 +309,34 @@ def clean_up_delistings():
     print('all done.')
 
 
+def refresh_all_postings():
+
+    source_url = 'http://vancouver.craigslist.ca/search/van/apa?hasPic=1&maxAsk=1600&minAsk=400&format=rss'
+
+    link_array = find_links_on_page(source_url)
+    existing_links = db_controller.get_all_links()
+
+    print(link_array)
+
+    for each_link in link_array:
+        if each_link in existing_links:
+            print('link is already there')
+            continue
+
+        print('it"s a whole new link! attempting to parse: {0}'.format(each_link))
+        link_response = parse_page_from_link(each_link)
+        time.sleep(1)
+        create_posting_from_parsed_link(link_response)
+
+
 if __name__ == '__main__':
 
     test_data_array = []
 
-    source_url = 'http://vancouver.craigslist.ca/search/van/apa?hasPic=1&maxAsk=1600&minAsk=400&format=rss'
+    # source_url = 'http://vancouver.craigslist.ca/search/van/apa?hasPic=1&maxAsk=1600&minAsk=400&format=rss'
     # result_content, result_encoding = grab_listings(source_url)
     # find_links_on_page(source_url)
     # pickle_content(test_data_array)
-
 
     # clean_up_delistings()
 
@@ -332,24 +349,23 @@ if __name__ == '__main__':
             print('{0} -> {1}'.format(k, v))
             print()
 
-
     # grab new listings with this one for now...
     if True:
         test_link = 'http://vancouver.craigslist.ca/van/apa/4789342850.html'
-        link_array = find_links_on_page(source_url)
-        existing_links = db_controller.get_all_links()
-
-        print(link_array)
-
-        for each_link in link_array:
-            if each_link in existing_links:
-                print('link is already there')
-                continue
-
-            print('it"s a whole new link! attempting to parse: {0}'.format(each_link))
-            link_response = parse_page_from_link(each_link)
-            time.sleep(1)
-            create_posting_from_parsed_link(link_response)
+        # link_array = find_links_on_page(source_url)
+        # existing_links = db_controller.get_all_links()
+        #
+        # print(link_array)
+        #
+        # for each_link in link_array:
+        #     if each_link in existing_links:
+        #         print('link is already there')
+        #         continue
+        #
+        #     print('it"s a whole new link! attempting to parse: {0}'.format(each_link))
+        #     link_response = parse_page_from_link(each_link)
+        #     time.sleep(1)
+        #     create_posting_from_parsed_link(link_response)
 
     # parsed = parse_page_from_link(test_link)
     # parsed_array = get_pickled_content()
